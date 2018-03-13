@@ -1,33 +1,41 @@
 'use strict';
 
 const express = require('express');
-
+const knex = require('../knex');
 // Create an router instance (aka "mini-app")
 const router = express.Router();
-
-// TEMP: Simple In-Memory Database
-/* 
-const data = require('../db/notes');
-const simDB = require('../db/simDB');
-const notes = simDB.initialize(data);
-*/
 
 // Get All (and search by query)
 /* ========== GET/READ ALL NOTES ========== */
 router.get('/notes', (req, res, next) => {
   const { searchTerm } = req.query;
-  /* 
-  notes.filter(searchTerm)
-    .then(list => {
-      res.json(list);
+
+  knex.select('notes.id', 'title', 'content'
+  ).from('notes')
+    .where(function () {
+      if (searchTerm) {
+        this.where('title', 'like', `%${searchTerm}%`);
+      }
     })
-    .catch(err => next(err)); 
-  */
-});
+    .orderBy('notes.id')
+    .then(results => {
+      res.json(results);
+    })
+    .catch(next);
+}); 
 
 /* ========== GET/READ SINGLE NOTES ========== */
 router.get('/notes/:id', (req, res, next) => {
   const noteId = req.params.id;
+
+
+  knex
+    .select()
+    .from('notes')
+    .where({ id: `%${noteId}%` })
+    .limit(5)
+    .debug(true)
+    .then(results => console.log(results));
 
   /*
   notes.find(noteId)

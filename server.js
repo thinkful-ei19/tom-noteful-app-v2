@@ -3,7 +3,7 @@
 const express = require('express');
 const morgan = require('morgan');
 
-const { PORT } = require('./config');
+const PORT  = 8080;
 
 const notesRouterV2 = require('./routes/notes.router');
 
