@@ -27,27 +27,18 @@ router.get('/notes', (req, res, next) => {
 /* ========== GET/READ SINGLE NOTES ========== */
 router.get('/notes/:id', (req, res, next) => {
   const noteId = req.params.id;
-
-
-  knex
-    .select()
+  knex.select('id', 'title', 'content')
     .from('notes')
-    .where({ id: `%${noteId}%` })
-    .limit(5)
+    .where('notes.id', noteId)
     .debug(true)
-    .then(results => console.log(results));
-
-  /*
-  notes.find(noteId)
-    .then(item => {
+    .then(([item]) => {
       if (item) {
         res.json(item);
       } else {
         next();
       }
     })
-    .catch(err => next(err));
-  */
+    .catch(next);
 });
 
 /* ========== PUT/UPDATE A SINGLE ITEM ========== */

@@ -11,10 +11,9 @@ const knex = require('../knex');
 //   });
 
 
-knex
-  .select()
+knex.select('id', 'title', 'content')
   .from('notes')
-  .where({id:'1001'})
+  .where({id:'1005'})
   .limit(5)
   .debug(true)
   .then(results => console.log(results));
