@@ -53,14 +53,20 @@ router.put('/notes/:id', (req, res, next) => {
       updateObj[field] = req.body[field];
     }
   });
-
   /***** Never trust users - validate input *****/
   if (!updateObj.title) {
     const err = new Error('Missing `title` in request body');
     err.status = 400;
     return next(err);
   }
-
+  knex('notes')
+    .where({ id: noteId })
+    .update({
+      title: req.body.title,
+      content: req.body.content
+    }, ['id', 'title', 'content'])
+    .then(results => res.json(results))
+    .catch(err => next(err));
   /*
   notes.update(noteId, updateObj)
     .then(item => {
@@ -85,7 +91,16 @@ router.post('/notes', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
+  const update = {
+    title,
+    content
+  };
 
+  knex.insert(update)
+    .into('notes')
+    .returning(['id', 'title', 'content'])
+    .then(results => res.json(results))
+    .catch(next);
   /*
   notes.create(newItem)
     .then(item => {
@@ -99,19 +114,14 @@ router.post('/notes', (req, res, next) => {
 
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/notes/:id', (req, res, next) => {
-  const id = req.params.id;
-  
-  /*
-  notes.delete(id)
-    .then(count => {
-      if (count) {
-        res.status(204).end();
-      } else {
-        next();
-      }
-    })
-    .catch(err => next(err));
-  */
+  const noteid = req.params.id;
+ 
+  knex('notes')
+    .where({id: noteid})
+    .del()
+    .then(results => res.json(results))
+    .catch(next);
 });
+
 
 module.exports = router;
