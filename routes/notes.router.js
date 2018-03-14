@@ -123,5 +123,4 @@ router.delete('/notes/:id', (req, res, next) => {
     .catch(next);
 });
 
-
 module.exports = router;
