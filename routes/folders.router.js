@@ -60,7 +60,31 @@ router.post('/folders', (req, res, next) => {
 });
 
 /* ========== PUT/UPDATE A SINGLE FOLDER ========== */
+router.put('/folders/:id', (req, res, next) => {
+  const noteId = req.params.id;
+  /***** Never trust users - validate input *****/
+  const updateObj = {};
+  const updateableFields = ['name'];
 
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      updateObj[field] = req.body[field];
+    }
+  });
+  /***** Never trust users - validate input *****/
+  if (!updateObj.name) {
+    const err = new Error('Missing `name` in request body');
+    err.status = 400;
+    return next(err);
+  }
+  knex('folders')
+    .where({ id: noteId })
+    .update({
+      name: req.body.name,
+    }, ['id', 'name'])
+    .then(results => res.json(results))
+    .catch(err => next(err));
+});
 
 
 /* ========== DELETE/REMOVE A SINGLE FOLDER ========== */
