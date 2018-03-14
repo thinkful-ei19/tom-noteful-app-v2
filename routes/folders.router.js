@@ -6,7 +6,7 @@ const knex = require('../knex');
 const router = express.Router();
 
 // Get All (and search by query)
-/* ========== GET/READ ALL NOTES ========== */
+/* ========== GET/READ ALL FOLDERS ========== */
 router.get('/folders', (req, res, next) => {
   knex.select('id', 'name')
     .from('folders')
@@ -16,7 +16,7 @@ router.get('/folders', (req, res, next) => {
     .catch(err => next(err));
 });
 
-/* ========== GET/READ SINGLE NOTES ========== */
+/* ========== GET/READ SINGLE FOLDERS ========== */
 router.get('/folders/:id', (req, res, next) => {
   const noteId = req.params.id;
   knex.select('id', 'title', 'content')
@@ -32,6 +32,32 @@ router.get('/folders/:id', (req, res, next) => {
     })
     .catch(next);
 });
+
+/* ========== POST/CREATE FOlDER ========== */
+// router.post('/folders', (req, res, next) => {
+//   const {id, name} = req.body; 
+//   const newFolder = { id, name };
+//   /***** Never trust users - validate input *****/
+//   if (!newFolder.title) {
+//     const err = new Error('Missing `title` in request body');
+//     err.status = 400;
+//     return next(err);
+//   }
+//   const update = {
+//     id,
+//     name
+//   };
+//   let foldersID;
+//   knex.insert(foldersID)
+//     .into('folders')
+//     .returning('id')
+//     .then(([result]) => {
+//       res.location(`${req.originalUrl}/${result.id}`).status(201).json(result);
+//     })
+//     .catch(err => next(err));
+// });
+
+
 
 
 module.exports = router;
