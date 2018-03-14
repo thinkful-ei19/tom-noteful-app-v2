@@ -3,11 +3,14 @@ SELECT CURRENT_DATE;
 
 DROP TABLE IF EXISTS notes;
 
-CREATE TABLE notes (
+
+CREATE TABLE notes
+(
   id serial PRIMARY KEY,
   title text NOT NULL,
   content text,
-  created timestamp DEFAULT now()
+  created timestamp DEFAULT now(),
+  folder_id int REFERENCES folders ON DELETE SET NULL
 );
 
 ALTER SEQUENCE notes_id_seq RESTART WITH 1000;
@@ -56,3 +59,20 @@ INSERT INTO notes (title, content) VALUES
 
 -- -- get all notes
 -- SELECT * FROM notes;
+
+
+DROP TABLE IF EXISTS folders;
+
+CREATE TABLE folders
+(
+  id serial PRIMARY KEY,
+  name text NOT NULL
+);
+
+INSERT INTO folders
+  (name)
+VALUES
+  ('Archive'),
+  ('Drafts'),
+  ('Personal'),
+  ('Work');
