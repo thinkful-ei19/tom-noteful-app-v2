@@ -34,28 +34,30 @@ router.get('/folders/:id', (req, res, next) => {
 });
 
 /* ========== POST/CREATE FOlDER ========== */
-// router.post('/folders', (req, res, next) => {
-//   const {id, name} = req.body; 
-//   const newFolder = { id, name };
-//   /***** Never trust users - validate input *****/
-//   if (!newFolder.title) {
-//     const err = new Error('Missing `title` in request body');
-//     err.status = 400;
-//     return next(err);
-//   }
-//   const update = {
-//     id,
-//     name
-//   };
-//   let foldersID;
-//   knex.insert(foldersID)
-//     .into('folders')
-//     .returning('id')
-//     .then(([result]) => {
-//       res.location(`${req.originalUrl}/${result.id}`).status(201).json(result);
-//     })
-//     .catch(err => next(err));
-// });
+router.post('/folders', (req, res, next) => {
+  const {name} = req.body; 
+  const newFolder = {name};
+  /***** Never trust users - validate input *****/
+  if (!newFolder.name) {
+    const err = new Error('Missing `title` in request body');
+    err.status = 400;
+    return next(err);
+  }
+  let foldersID;
+  knex.insert(newFolder)
+    .into('folders')
+    .returning('name')
+    .then(([id]) => {
+      foldersID = id;
+      // Using the new id, select the new folder
+      return knex.select('name')
+        .from('folders');
+    })
+    .then(([result]) => {
+      res.location(`${req.originalUrl}/${result.id}`).status(201).json(result);
+    })
+    .catch(err => next(err));
+});
 
 
 
