@@ -59,6 +59,21 @@ router.post('/folders', (req, res, next) => {
     .catch(err => next(err));
 });
 
+/* ========== PUT/UPDATE A SINGLE FOLDER ========== */
+
+
+
+/* ========== DELETE/REMOVE A SINGLE FOLDER ========== */
+router.delete('/folders/:id', (req, res, next) => {
+  const noteid = req.params.id;
+
+  knex('folders')
+    .where({ id: noteid })
+    .del()
+    .then(results => res.json(results))
+    .catch(next);
+});
+
 
 
 
