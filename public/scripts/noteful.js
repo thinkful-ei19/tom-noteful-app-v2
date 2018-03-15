@@ -295,7 +295,6 @@ const noteful = (function () {
 
       const newTagName = $('.js-new-tag-entry').val();
 
-      console.log('Create a tag, coming soon...');
       api.create('/api/tags', { name: newTagName })
         .then(() => {
           return api.search('/api/tags');
@@ -320,7 +319,6 @@ const noteful = (function () {
 
       store.currentNote = {};
       
-      console.log('Delete a tag, coming soon...');
       api.remove(`/api/tags/${tagId}`)
         .then(() => {
           return api.search('/api/tags');
