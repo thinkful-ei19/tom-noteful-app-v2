@@ -6,22 +6,22 @@ const knex = require('../knex');
 const router = express.Router();
 
 // Get All (and search by query)
-/* ========== GET/READ ALL FOLDERS ========== */
-router.get('/folders', (req, res, next) => {
+/* ========== GET/READ ALL TAGS ========== */
+router.get('/tags', (req, res, next) => {
   knex.select('id', 'name')
-    .from('folders')
+    .from('tags')
     .then(results => {
       res.json(results);
     })
     .catch(err => next(err));
 });
 
-/* ========== GET/READ SINGLE FOLDERS ========== */
-router.get('/folders/:id', (req, res, next) => {
-  const noteId = req.params.id;
-  knex.select('id', 'title', 'content')
-    .from('folders')
-    .where('folders.id', noteId)
+/* ========== GET/READ SINGLE TAGS ========== */
+router.get('/tags/:id', (req, res, next) => {
+  const tagsId = req.params.id;
+  knex.select('name')
+    .from('tags')
+    .where('tags.id', tagsId)
     .debug(true)
     .then(([item]) => {
       if (item) {
@@ -33,29 +33,34 @@ router.get('/folders/:id', (req, res, next) => {
     .catch(next);
 });
 
-/* ========== POST/CREATE FOlDER ========== */
-router.post('/folders', (req, res, next) => {
-  const {name} = req.body; 
-  const newFolder = {name};
-  /***** Never trust users - validate input *****/
-  if (!newFolder.name) {
-    const err = new Error('Missing `title` in request body');
+
+/* ========== POST TAGS ========== */
+router.post('/tags', (req, res, next) => {
+  const { name } = req.body;
+
+  /***** Never trust users. Validate input *****/
+  if (!name) {
+    const err = new Error('Missing `name` in request body');
     err.status = 400;
     return next(err);
   }
-  knex.insert(newFolder)
-    .into('folders')
-    .returning('id')
-    .then(([id]) => {
-      res.location(`${req.originalUrl}/${id}`).status(201).json(id);
+
+  const newItem = { name };
+
+  knex.insert(newItem)
+    .into('tags')
+    .returning(['id', 'name'])
+    .then((results) => {
+      // Uses Array index solution to get first item in results array
+      const result = results[0];
+      res.location(`${req.originalUrl}/${result.id}`).status(201).json(result);
     })
-    
     .catch(err => next(err));
 });
 
 /* ========== PUT/UPDATE A SINGLE FOLDER ========== */
-router.put('/folders/:id', (req, res, next) => {
-  const noteId = req.params.id;
+router.put('/tags/:id', (req, res, next) => {
+  const tagsId = req.params.id;
   /***** Never trust users - validate input *****/
   const updateObj = {};
   const updateableFields = ['name'];
@@ -71,8 +76,8 @@ router.put('/folders/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-  knex('folders')
-    .where({ id: noteId })
+  knex('tags')
+    .where({ id: tagsId })
     .update({
       name: req.body.name,
     }, ['id', 'name'])
@@ -82,15 +87,17 @@ router.put('/folders/:id', (req, res, next) => {
 
 
 /* ========== DELETE/REMOVE A SINGLE FOLDER ========== */
-router.delete('/folders/:id', (req, res, next) => {
-  const noteid = req.params.id;
+router.delete('/tags/:id', (req, res, next) => {
+  const tagsId = req.params.id;
 
-  knex('folders')
-    .where({ id: noteid })
+  knex('tags')
+    .where({ id: tagsId })
     .del()
     .then(results => res.json(results))
     .catch(next);
 });
+
+
 
 
 

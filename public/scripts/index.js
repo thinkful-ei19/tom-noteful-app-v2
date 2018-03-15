@@ -17,11 +17,11 @@ $(document).ready(function () {
       noteful.render();
     });
 
-  // api.search('/api/tags')
-  //   .then(response => {
-  //     store.tags = response;
-  //     noteful.render();
-  //   });
+  api.search('/api/tags')
+    .then(response => {
+      store.tags = response;
+      noteful.render();
+    });
 
 });
 
