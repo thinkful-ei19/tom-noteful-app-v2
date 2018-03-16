@@ -3,7 +3,7 @@
 const express = require('express');
 const morgan = require('morgan');
 
-const PORT  = 8080;
+
 
 const notesRouterV2 = require('./routes/notes.router');
 const folderRouterV1 = require('./routes/folders.router');
@@ -49,11 +49,10 @@ app.use(function (err, req, res, next) {
 
 // Listen for incoming connections
 if (require.main === module) {
-  app.listen(PORT, function () {
-    console.info(`Server listening on ${this.address().port}`);
-  }).on('error', err => {
-    console.error(err);
-  });
+  app.listen(process.env.PORT || 5000)
+    .on('error', err => {
+      console.error(err);
+    });
 }
 
 module.exports = app; // Export for testing
