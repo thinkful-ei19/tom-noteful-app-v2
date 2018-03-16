@@ -56,7 +56,7 @@ router.get('/notes/:id', (req, res, next) => {
     .then(result => {
       if (result) {
         const hydrated = hydrateNotes(result);
-        res.json(hydrated);
+        res.status(201).json(hydrated[0]);
       } else {
         next();
       }
@@ -168,7 +168,7 @@ router.delete('/notes/:id', (req, res, next) => {
   knex('notes')
     .where({id: noteid})
     .del()
-    .then(results => res.json(results))
+    .then(results => res.status(204).json(results))
     .catch(next);
 });
 
