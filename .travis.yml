@@ -1,2 +1,9 @@
 language: node_js
 node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: hKjPS6EeVKMzNY6xIaRwcGYh9z41e8uV7BvHAOD++4Zy2At6Rj+vPEfKi0/dGBBydYVkrAwM6oL8x3kc8/nsHd7WcPsKMwiASWIkXiiaP3/oIvtaXTnWnFT8me505NHUFtTUYjUXc3coVqnl7KHHN2R0DguulQvRmmp77izrrS5ezh4qE8AeU8vWNqwZw0aI4d9c01XhzAON9BfGWIo5/PB3jYRbxaaCkvnWyQJzppUt+WeBcuCexjzCRYJzDQTDnEshj0fyxiORyAM3eV84vkGk4m8cMRKThmmjf5n4CH5J6WfzCfD0xnx4tFzolyQgAAVG7rzvoTGeljsIkUtN2Zb7pY8TJWwMYX58TS3h/JjPNCLwm7E9RjBRZNpUfagdbGQ7tvSOsxd4gRYEZDNFQX1oIeTyiapVYDM3hsMKgwBaGvH7R9WpnQFBLnAIaCsQ167z+steqptBdF+IYPxj67Eik7W1uKz/llVKqeJVAvlwLfLFB2UGoe+mMDx/W1Qry2SrXnnfYRV183JxKLsSZx+SpHcbyDISpsvBHLzXrk8W96XLuuv4P3J67yIiG/5dbr0TCPN3ckhUchK8MhfU1OqpCPnKg/injSWPasHpxT658a8V5uyNQrnVKrw/q5wGrMPk27bvxvuVVuv5tXSYxghTuuVigWFzgFGq/Pt1Mj0=
+  app: tom-noteful-app-v2
+  on:
+    repo: thinkful-ei19/tom-noteful-app-v2
