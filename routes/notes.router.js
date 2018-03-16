@@ -53,14 +53,14 @@ router.get('/notes/:id', (req, res, next) => {
     .leftJoin('tags', 'notes_tags.tag_id', 'tags.id')
     .where('notes.id', noteId)
     .debug(true)
-    .then(([item]) => {
-      if (item) {
-        res.json(item);
+    .then(result => {
+      if (result) {
+        const hydrated = hydrateNotes(result);
+        res.json(hydrated);
       } else {
         next();
       }
-    })
-    .catch(next);
+    });
 });
 
 /* ========== PUT/UPDATE A SINGLE ITEM ========== */
